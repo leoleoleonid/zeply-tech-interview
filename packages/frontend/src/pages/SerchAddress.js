@@ -1,36 +1,17 @@
-import { useState, useEffect } from 'react';
+import {useState, useEffect, useContext} from 'react';
 import {debounce} from 'lodash';
+import {SubscribedAddressesList} from '../components/SubcribedAddresses/SubscribedAddressesList'
+import {SubscribedAddressesContext} from "../components/SubcribedAddresses/SubscribedAddressProvider";
 
 function SearchBitcoinAddress() {
+
+    const { addSubscribedAddress , subscribedAddresses } = useContext(SubscribedAddressesContext);
+
     const [bitcoinAddress, setBitcoinAddress] = useState('');
     const [response, setResponse] = useState(null);
     const [validationError, setValidationError] = useState(null);
     const [error, setError] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
-    const [subscribedAddresses, setSubscribedAddresses] = useState([]);
-
-    // useEffect(() => {
-    //     let timerId;
-    //     console.log('timerId', timerId)
-    //     if (bitcoinAddress /*&& bitcoinAddress.length === 34*/) {
-    //         setIsLoading(true);
-    //         timerId = setTimeout(() => {
-    //             fetch(`https://blockchain.info/rawaddr/${bitcoinAddress}`)
-    //                 .then(response => response.json())
-    //                 .then(data => {
-    //                     setIsLoading(false);
-    //                     setResponse(data);
-    //                 })
-    //                 .catch(error => {
-    //                     setIsLoading(false);
-    //                     setError(error);
-    //                 });
-    //         }, 500);
-    //     }
-    //     console.log('error', error)
-    //     console.log('response', response)
-    //     return () => clearTimeout(timerId);
-    // }, [bitcoinAddress]);
 
     const handleSearch = () => {
 
@@ -63,22 +44,9 @@ function SearchBitcoinAddress() {
     const debouncedHandleSearch = debounce(handleSearch, 300);
 
     const handleSubscribe = () => {
-        if (!subscribedAddresses.includes(bitcoinAddress)) {
-            fetch(`https://your-api-url.com/api/subscribe`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ address: bitcoinAddress })
-            })
-                .then(response => response.json())
-                .then(data => {
-                    setSubscribedAddresses([...subscribedAddresses, bitcoinAddress]);
-                    // create a new WebSocket subscription here for the subscribed address
-                })
-                .catch(error => {
-                    console.error('Error subscribing to address:', error);
-                });
+        if (!subscribedAddresses.includes(bitcoinAddress) && !validationError) {
+            // TODO send new addr on server
+            addSubscribedAddress(bitcoinAddress)
         }
     };
 
@@ -111,7 +79,15 @@ function SearchBitcoinAddress() {
                     <p>Current address balance: {response.final_balance}</p>
                 </div>
             )}
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+
+            <SubscribedAddressesList/>
         </div>
+
     );
 }
 
