@@ -6,28 +6,30 @@ import {BrowserRouter, Routes, Route} from "react-router-dom";
 import {NavBar} from "./components/NavBar";
 import SearchBitcoinAddress from "./pages/SerchAddress";
 import SearchBitcoinTransaction from "./pages/SearchTransaction";
-import 'react-toastify/dist/ReactToastify.css';
 import SubscribedAddressesProvider from "./components/SubcribedAddresses/SubscribedAddressProvider";
 import WSConnectionProvider from "./components/WSConnectionProvider";
 import SubscribeOnTransactionsProvider from "./components/SubscribeOnTransactions/SubscribeOnTransactionsProvider";
+import CurrencyProvider from "./components/Currency/CurrencyProvider";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-      <WSConnectionProvider>
-          <SubscribedAddressesProvider>
-              <SubscribeOnTransactionsProvider>
-                  <BrowserRouter>
-                      <NavBar />
-                      <Routes>
-                          <Route exact path="/" element={<SearchBitcoinAddress/>}/>
-                          <Route exact path="/search-address" element={<SearchBitcoinAddress/>}/>
-                          <Route exact path="/search-transaction" element={<SearchBitcoinTransaction/>} />
-                      </Routes>
-                  </BrowserRouter>
-              </SubscribeOnTransactionsProvider>
-          </SubscribedAddressesProvider>
-      </WSConnectionProvider>
+      <CurrencyProvider>
+          <WSConnectionProvider>
+              <SubscribedAddressesProvider>
+                  <SubscribeOnTransactionsProvider>
+                      <BrowserRouter>
+                          <NavBar />
+                          <Routes>
+                              <Route exact path="/" element={<SearchBitcoinAddress/>}/>
+                              <Route exact path="/search-address" element={<SearchBitcoinAddress/>}/>
+                              <Route exact path="/search-transaction" element={<SearchBitcoinTransaction/>} />
+                          </Routes>
+                      </BrowserRouter>
+                  </SubscribeOnTransactionsProvider>
+              </SubscribedAddressesProvider>
+          </WSConnectionProvider>
+      </CurrencyProvider>
   </React.StrictMode>
 );
 

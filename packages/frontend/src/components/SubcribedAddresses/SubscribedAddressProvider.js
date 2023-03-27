@@ -1,5 +1,4 @@
 import React, {useState, useEffect, useContext} from 'react';
-import 'react-toastify/dist/ReactToastify.css';
 import {WSConnectionContext} from "../WSConnectionProvider";
 
 export const SubscribedAddressesContext = React.createContext([]);

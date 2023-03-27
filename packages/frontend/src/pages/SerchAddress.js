@@ -2,20 +2,31 @@ import {useState, useEffect, useContext} from 'react';
 import {debounce} from 'lodash';
 import {SubscribedAddressesList} from '../components/SubcribedAddresses/SubscribedAddressesList'
 import {SubscribedAddressesContext} from "../components/SubcribedAddresses/SubscribedAddressProvider";
+import {CurrencyContext} from "../components/Currency/CurrencyProvider";
 
 function SearchBitcoinAddress() {
 
     const { addSubscribedAddress , subscribedAddresses } = useContext(SubscribedAddressesContext);
+    const { currency, rawCalculatePrice: calculatePrice } = useContext(CurrencyContext);
 
     const [bitcoinAddress, setBitcoinAddress] = useState('');
     const [response, setResponse] = useState(null);
+    const [responseForCurrency, setResponseForCurrency] = useState(response);
     const [validationError, setValidationError] = useState(null);
     const [error, setError] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
 
+    useEffect(() => {
+        if(response) {
+            const newResponse = {...response}
+            newResponse.total_received = calculatePrice(response.total_received);
+            newResponse.total_sent = calculatePrice(response.total_sent);
+            newResponse.final_balance = calculatePrice(response.final_balance);
+            setResponseForCurrency(newResponse);
+        }
+    },[currency])
+
     const handleSearch = () => {
-
-
         if (bitcoinAddress && !validationError) {
             setValidationError(false)
             setIsLoading(true);
@@ -24,7 +35,11 @@ function SearchBitcoinAddress() {
                 .then(data => {
                     data.confirmed_txs = (data.txs.filter(tx => tx.double_spend === false)).length;
                     setIsLoading(false);
-                    setResponse(data);
+                    setResponse({...data});
+                    data.total_received = calculatePrice(data.total_received);
+                    data.total_sent = calculatePrice(data.total_sent);
+                    data.final_balance = calculatePrice(data.final_balance);
+                    setResponseForCurrency(data);
                 })
                 .catch(error => {
                     setIsLoading(false);
@@ -72,11 +87,11 @@ function SearchBitcoinAddress() {
             {isLoading && <p>Loading...</p>}
             {!isLoading && !validationError && !error && response && (
                 <div>
-                    <p>Number of confirmed transactions: {response.confirmed_txs}</p>
-                    <p>Total BTC received: {response.total_received}</p>
-                    <p>Total BTC spent: {response.total_sent}</p>
-                    <p>Total BTC unspent: {response.final_balance}</p>
-                    <p>Current address balance: {response.final_balance}</p>
+                    <p>Number of confirmed transactions: {responseForCurrency.confirmed_txs}</p>
+                    <p>Total {currency} received: {responseForCurrency.total_received}</p>
+                    <p>Total {currency} spent: {responseForCurrency.total_sent}</p>
+                    <p>Total {currency} unspent: {responseForCurrency.final_balance}</p>
+                    <p>Current address balance ({currency}): {responseForCurrency.final_balance}</p>
                 </div>
             )}
             <br/>
