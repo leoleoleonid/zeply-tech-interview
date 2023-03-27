@@ -73,6 +73,8 @@ function SearchBitcoinAddress() {
         }
     };
 
+    // TODO use Table component
+
     return (
         <Container maxWidth="md">
             <Box marginTop={10}>
@@ -141,6 +143,7 @@ function SearchBitcoinAddress() {
                                 <Typography>{responseForCurrency.final_balance}</Typography>
                             </Grid>
                         </Grid>
+                        <Divider style={{ marginTop: '1rem', marginBottom: '1rem' }} />
                     </Box>
                 )}
                 <SubscribedAddressesList />

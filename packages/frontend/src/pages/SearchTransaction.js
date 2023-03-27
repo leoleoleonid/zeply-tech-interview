@@ -1,8 +1,5 @@
-import {useState, useEffect, useContext} from 'react';
-import {toast} from 'react-toastify'
+import {useState, useContext} from 'react';
 import Switch from '@mui/material/Switch';
-
-import FormLabel from '@mui/material/FormLabel';
 import FormControl from '@mui/material/FormControl';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -16,8 +13,8 @@ import Alert from "@mui/material/Alert";
 import CircularProgress from "@mui/material/CircularProgress";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
-import {SubscribedAddressesList} from "../components/SubcribedAddresses/SubscribedAddressesList";
 import {debounce} from "lodash";
+
 function SearchBitcoinTransaction() {
     const {subscribedOnTransactions, setSubscribesOnTransactions} = useContext(SubscribeOnTransactionsContext);
     const {ws} = useContext(WSConnectionContext);
@@ -167,27 +164,11 @@ function SearchBitcoinTransaction() {
                                 </Grid>
                             </Box>
                         )}
-
                     </FormGroup>
                 </FormControl>
             </Box>
         </Container>
     );
-    // return (
-    //     <div>
-    //         <FormControl component="fieldset" variant="standard">
-    //             <FormLabel component="legend">Search transactions in BTC blockchain</FormLabel>
-    //             <FormGroup>
-    //                 <FormControlLabel
-    //                     control={
-    //                         <Switch checked={subscribedOnTransactions} onChange={handleChange} name="gilad" />
-    //                     }
-    //                     label="Subscribe on all new transactions in BTC blockchain"
-    //                 />
-    //             </FormGroup>
-    //         </FormControl>
-    //     </div>
-    // );
 }
 
 export default SearchBitcoinTransaction;

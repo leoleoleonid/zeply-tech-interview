@@ -1,14 +1,17 @@
-import React, {useContext, useState} from "react";
+import React, {useContext} from "react";
 import {SubscribedAddressesContext} from "./SubscribedAddressProvider";
+import Box from "@mui/material/Box";
+import Table from "../common/Table";
 
 export function SubscribedAddressesList() {
     const { subscribedAddresses } = useContext(SubscribedAddressesContext);
 
     return (
-        <div>
-            {subscribedAddresses.map(address => (
-                <div key={address}>{address}</div>
-            ))}
-        </div>
+        <Box marginTop={3}>
+            <Table
+                data={subscribedAddresses}
+                title="Subscribed addresses"
+            />
+        </Box>
     );
 }
