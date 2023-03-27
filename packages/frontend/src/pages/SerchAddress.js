@@ -3,11 +3,19 @@ import {debounce} from 'lodash';
 import {SubscribedAddressesList} from '../components/SubcribedAddresses/SubscribedAddressesList'
 import {SubscribedAddressesContext} from "../components/SubcribedAddresses/SubscribedAddressProvider";
 import {CurrencyContext} from "../components/Currency/CurrencyProvider";
+import {Grid, TextField} from "@mui/material";
+import Button from "@mui/material/Button";
+import Container from "@mui/material/Container";
+import Box from "@mui/material/Box";
+import Alert from "@mui/material/Alert";
+import CircularProgress from "@mui/material/CircularProgress";
+import Divider from "@mui/material/Divider";
+import Typography from "@mui/material/Typography";
 
 function SearchBitcoinAddress() {
 
     const { addSubscribedAddress , subscribedAddresses } = useContext(SubscribedAddressesContext);
-    const { currency, rawCalculatePrice: calculatePrice } = useContext(CurrencyContext);
+    const { currency, calculatePrice } = useContext(CurrencyContext);
 
     const [bitcoinAddress, setBitcoinAddress] = useState('');
     const [response, setResponse] = useState(null);
@@ -66,44 +74,80 @@ function SearchBitcoinAddress() {
     };
 
     return (
-        <div>
-            <br/>
-            <br/>
-            <br/>
-            <br/>
-            <br/>
-            <br/>
-            <br/>
-            <br/>
-            <br/>
-            <br/>
-            <br/>
-
-            <input type="text" value={bitcoinAddress} onChange={handleAddrChange} />
-            <button onClick={debouncedHandleSearch}>Search</button>
-            <button onClick={handleSubscribe}>Subscribe</button>
-            {validationError && <p style={{ color: 'red' }}>{validationError}</p>}
-            {error && <p style={{ color: 'red' }}>{JSON.stringify(error)}</p>}
-            {isLoading && <p>Loading...</p>}
-            {!isLoading && !validationError && !error && response && (
-                <div>
-                    <p>Number of confirmed transactions: {responseForCurrency.confirmed_txs}</p>
-                    <p>Total {currency} received: {responseForCurrency.total_received}</p>
-                    <p>Total {currency} spent: {responseForCurrency.total_sent}</p>
-                    <p>Total {currency} unspent: {responseForCurrency.final_balance}</p>
-                    <p>Current address balance ({currency}): {responseForCurrency.final_balance}</p>
-                </div>
-            )}
-            <br/>
-            <br/>
-            <br/>
-            <br/>
-            <br/>
-
-            <SubscribedAddressesList/>
-        </div>
-
+        <Container maxWidth="md">
+            <Box marginTop={10}>
+                <Grid container spacing={3} alignItems="center">
+                    <Grid item xs={12} md={4}>
+                        <TextField
+                            variant='standard'
+                            label="Bitcoin address"
+                            fullWidth
+                            value={bitcoinAddress}
+                            onChange={handleAddrChange}
+                            error={Boolean(validationError)}
+                            helperText={validationError || ' '}
+                        />
+                    </Grid>
+                    <Grid item xs={12} md={4}>
+                        <Button variant="contained" color="primary" onClick={debouncedHandleSearch}>
+                            Search
+                        </Button>
+                    </Grid>
+                    <Grid item xs={12} md={4}>
+                        <Button variant="contained" color="secondary" onClick={handleSubscribe}>
+                            Subscribe
+                        </Button>
+                    </Grid>
+                </Grid>
+                {error && (
+                    <Alert severity="error" style={{ marginTop: '1rem' }}>
+                        {JSON.stringify(error)}
+                    </Alert>
+                )}
+                {isLoading && <CircularProgress style={{ marginTop: '1rem' }} />}
+                {!isLoading && !validationError && !error && response && (
+                    <Box marginTop={3}>
+                        <Typography variant="h6">Address Information</Typography>
+                        <Divider style={{ marginTop: '1rem', marginBottom: '1rem' }} />
+                        <Grid container spacing={3} alignItems="center">
+                            <Grid item xs={12} md={3}>
+                                <Typography>Number of confirmed transactions:</Typography>
+                            </Grid>
+                            <Grid item xs={12} md={9}>
+                                <Typography>{responseForCurrency.confirmed_txs}</Typography>
+                            </Grid>
+                            <Grid item xs={12} md={3}>
+                                <Typography>Total {currency} received:</Typography>
+                            </Grid>
+                            <Grid item xs={12} md={9}>
+                                <Typography>{responseForCurrency.total_received}</Typography>
+                            </Grid>
+                            <Grid item xs={12} md={3}>
+                                <Typography>Total {currency} spent:</Typography>
+                            </Grid>
+                            <Grid item xs={12} md={9}>
+                                <Typography>{responseForCurrency.total_sent}</Typography>
+                            </Grid>
+                            <Grid item xs={12} md={3}>
+                                <Typography>Total {currency} unspent:</Typography>
+                            </Grid>
+                            <Grid item xs={12} md={9}>
+                                <Typography>{responseForCurrency.final_balance}</Typography>
+                            </Grid>
+                            <Grid item xs={12} md={3}>
+                                <Typography>Current address balance ({currency}):</Typography>
+                            </Grid>
+                            <Grid item xs={12} md={9}>
+                                <Typography>{responseForCurrency.final_balance}</Typography>
+                            </Grid>
+                        </Grid>
+                    </Box>
+                )}
+                <SubscribedAddressesList />
+            </Box>
+        </Container>
     );
+
 }
 
 export default SearchBitcoinAddress;

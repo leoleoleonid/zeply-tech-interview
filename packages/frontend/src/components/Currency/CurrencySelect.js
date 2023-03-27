@@ -22,6 +22,9 @@ export default function CurrencySelect() {
                     value={currency}
                     label="Currency"
                     onChange={handleChange}
+                    sx={{
+                        color: '#FFFFFF'
+                    }}
                 >
                     <MenuItem value={CURRENCIES.BTC}>{CURRENCIES.BTC}</MenuItem>
                     <MenuItem value={CURRENCIES.USD}>{CURRENCIES.USD}</MenuItem>
