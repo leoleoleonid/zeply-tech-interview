@@ -3,12 +3,21 @@ import Divider from "@mui/material/Divider";
 import {Grid} from "@mui/material";
 import React from "react";
 
-export default function Table({title, data}) {
+export default function Table({title, data, headers}) {
     return (
         <>
             <Typography variant="h6">{title}</Typography>
             <Divider style={{ marginTop: '1rem', marginBottom: '1rem' }} />
             <Grid container spacing={3} alignItems="center">
+                {headers && headers.length && (
+                    <>
+                        <TableLine
+                            column1={headers[0]}
+                            column2={headers[1]}
+                        />
+                        <Divider style={{ marginTop: '1rem', marginBottom: '1rem' }} />
+                    </>
+                )}
                 {
                     Object.entries(data).map(([key, value]) => (
                         <TableLine

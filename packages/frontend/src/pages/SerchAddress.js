@@ -11,6 +11,8 @@ import Alert from "@mui/material/Alert";
 import CircularProgress from "@mui/material/CircularProgress";
 import Divider from "@mui/material/Divider";
 import Typography from "@mui/material/Typography";
+import {TopNList} from "../components/TopNList/TopNList";
+import {TopSearchesAddressList} from "../components/TopSearched/TopSearchedAddressList";
 
 function SearchBitcoinAddress() {
 
@@ -77,6 +79,7 @@ function SearchBitcoinAddress() {
 
     return (
         <Container maxWidth="md">
+            <TopSearchesAddressList/>
             <Box marginTop={10}>
                 <Grid container spacing={3} alignItems="center">
                     <Grid item xs={12} md={4}>

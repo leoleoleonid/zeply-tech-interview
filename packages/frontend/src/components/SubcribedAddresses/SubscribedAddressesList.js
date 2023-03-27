@@ -11,6 +11,7 @@ export function SubscribedAddressesList() {
             <Table
                 data={subscribedAddresses}
                 title="Subscribed addresses"
+                headers={["№", "Address"]}
             />
         </Box>
     );
