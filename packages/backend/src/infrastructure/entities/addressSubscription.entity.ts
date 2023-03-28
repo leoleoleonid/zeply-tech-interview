@@ -10,8 +10,12 @@ export class AddressSubscriptionEntity {
   @Column()
   address: string;
 
-  @ManyToOne(() => UserEntity, (user) => user.id)
+  // @ManyToOne(() => UserEntity, (user) => user.id)
+  // @JoinColumn({ name: 'userId' })
+  // userId: number;
+
+  @ManyToOne(() => UserEntity, (user) => user.addressSubscriptions)
   @JoinColumn({ name: 'userId' })
-  userId: number;
+  user: UserEntity;
 
 }

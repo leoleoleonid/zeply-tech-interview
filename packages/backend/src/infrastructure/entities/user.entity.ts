@@ -9,6 +9,8 @@ export class UserEntity {
   @Column()
   username: string;
 
-  @OneToMany(() => AddressSubscriptionEntity, (addressSubscription) => addressSubscription.userId)
-  addressSubscriptions: AddressSubscriptionEntity[]
+  // @OneToMany(() => AddressSubscriptionEntity, (addressSubscription) => addressSubscription.userId)
+  // addressSubscriptions: AddressSubscriptionEntity[]
+  @OneToMany(() => AddressSubscriptionEntity, (addressSubscription) => addressSubscription.user)
+  addressSubscriptions: AddressSubscriptionEntity[];
 }
