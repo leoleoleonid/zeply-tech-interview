@@ -2,34 +2,18 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
-import {BrowserRouter, Routes, Route} from "react-router-dom";
-import {NavBar} from "./components/NavBar";
-import SearchBitcoinAddress from "./pages/SerchAddress";
-import SearchBitcoinTransaction from "./pages/SearchTransaction";
-import SubscribedAddressesProvider from "./components/SubcribedAddresses/SubscribedAddressProvider";
-import WSConnectionProvider from "./components/WSConnectionProvider";
-import SubscribeOnTransactionsProvider from "./components/SubscribeOnTransactions/SubscribeOnTransactionsProvider";
-import CurrencyProvider from "./components/Currency/CurrencyProvider";
+import App from "./App";
+import {BrowserRouter} from "react-router-dom";
+import AuthProvider from "./components/Auth/AuthProvider";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-      <CurrencyProvider>
-          <WSConnectionProvider>
-              <SubscribedAddressesProvider>
-                  <SubscribeOnTransactionsProvider>
-                      <BrowserRouter>
-                          <NavBar />
-                          <Routes>
-                              <Route exact path="/" element={<SearchBitcoinAddress/>}/>
-                              <Route exact path="/search-address" element={<SearchBitcoinAddress/>}/>
-                              <Route exact path="/search-transaction" element={<SearchBitcoinTransaction/>} />
-                          </Routes>
-                      </BrowserRouter>
-                  </SubscribeOnTransactionsProvider>
-              </SubscribedAddressesProvider>
-          </WSConnectionProvider>
-      </CurrencyProvider>
+      <BrowserRouter>
+          <AuthProvider>
+              <App/>
+          </AuthProvider>
+      </BrowserRouter>
   </React.StrictMode>
 );
 

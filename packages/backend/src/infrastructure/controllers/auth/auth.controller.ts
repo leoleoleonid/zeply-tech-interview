@@ -1,4 +1,4 @@
-import {Body, Controller, Post} from '@nestjs/common';
+import {Body, Controller, Get, Param, Post} from '@nestjs/common';
 import {ApiOkResponse} from "@nestjs/swagger";
 import {AuthUsecases} from "../../../usecases/auth.usecases";
 import {User} from "../../../domain/model/user";
@@ -14,5 +14,11 @@ export class AuthController {
   @ApiOkResponse({type: UserPresenter, isArray: true})
   async login(@Body() body: LoginDTO): Promise<User> {
     return this.authUsecases.login(body.username);
+  }
+
+  @Get('getUserById/:userId')
+  @ApiOkResponse({type: UserPresenter, isArray: true})
+  async getUserById(@Param('userId') userId: number): Promise<User> {
+    return this.authUsecases.getUserById(userId);
   }
 }
