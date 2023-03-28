@@ -1,10 +1,10 @@
-import {Entity, Column, ManyToOne, JoinColumn} from 'typeorm';
+import {Entity, Column, ManyToOne, JoinColumn, PrimaryColumn} from 'typeorm';
 import {UserEntity} from "./user.entity";
 
 @Entity()
 export class AddressSubscriptionEntity {
 
-  @Column()
+  @PrimaryColumn()
   address: string;
 
   @ManyToOne(() => UserEntity, (user) => user.id)

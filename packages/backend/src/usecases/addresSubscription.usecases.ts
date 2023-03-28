@@ -4,7 +4,6 @@ import {
     ADDRESS_SUBSCRIPTION_REPOSITORY_TOKEN,
     AddressSubscriptionRepositoryInterface
 } from "../domain/repositories/addresSubscription.repository.interface";
-import {AddressSubscription} from "../domain/model/addressSubscription";
 
 @Injectable()
 export class AddressSubscriptionUsecases {
