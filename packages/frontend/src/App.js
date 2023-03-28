@@ -1,25 +1,41 @@
-import logo from './logo.svg';
-import './App.css';
+import CurrencyProvider from "./components/Currency/CurrencyProvider";
+import WSConnectionProvider from "./components/WSConnectionProvider";
+import SubscribedAddressesProvider from "./components/SubcribedAddresses/SubscribedAddressProvider";
+import SubscribeOnTransactionsProvider from "./components/SubscribeOnTransactions/SubscribeOnTransactionsProvider";
+import {Route, Routes} from "react-router-dom";
+import {NavBar} from "./components/NavBar";
+import SearchBitcoinAddress from "./pages/SerchAddress";
+import SearchBitcoinTransaction from "./pages/SearchTransaction";
+import React, {useContext} from "react";
+import {AuthContext} from "./components/Auth/AuthProvider";
+import Login from "./components/Auth/Login";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React!
-        </a>
-      </header>
-    </div>
-  );
+
+  const {user} = useContext(AuthContext);
+
+  if (user) {
+      return (
+          <CurrencyProvider>
+            <WSConnectionProvider>
+              <SubscribedAddressesProvider>
+                <SubscribeOnTransactionsProvider>
+                  <NavBar />
+                  <Routes>
+                    <Route exact path="/" element={<SearchBitcoinAddress/>}/>
+                    <Route exact path="/search-address" element={<SearchBitcoinAddress/>}/>
+                    <Route exact path="/search-transaction" element={<SearchBitcoinTransaction/>} />
+                  </Routes>
+                </SubscribeOnTransactionsProvider>
+              </SubscribedAddressesProvider>
+            </WSConnectionProvider>
+          </CurrencyProvider>
+      )
+  } else {
+      return (
+          <Login/>
+      )
+  }
 }
 
 export default App;

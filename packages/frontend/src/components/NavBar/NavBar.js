@@ -11,6 +11,7 @@ import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
 import { Link } from 'react-router-dom';
 import CurrencySelect from '../Currency/CurrencySelect';
+import Logout from "../Auth/Logout";
 
 export const pages = [
     {
@@ -103,6 +104,9 @@ function NavBar() {
                                 </Button>
                             </Link>
                         ))}
+                    </Box>
+                    <Box sx={{ flexGrow: 0 }}>
+                        <Logout/>
                     </Box>
                     <Box sx={{ flexGrow: 0 }}>
                         <CurrencySelect />

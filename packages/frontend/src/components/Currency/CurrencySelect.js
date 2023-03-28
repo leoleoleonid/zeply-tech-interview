@@ -15,7 +15,7 @@ export default function CurrencySelect() {
 
     return (
         <Box sx={{ minWidth: 120 }}>
-            <FormControl fullWidth>
+            <FormControl >
                 <Select
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"
@@ -23,7 +23,8 @@ export default function CurrencySelect() {
                     label="Currency"
                     onChange={handleChange}
                     sx={{
-                        color: '#FFFFFF'
+                        backgroundColor: '#e0e0e0',
+                        color: '#000000'
                     }}
                 >
                     <MenuItem value={CURRENCIES.BTC}>{CURRENCIES.BTC}</MenuItem>
