@@ -1,11 +1,13 @@
-import {Body, Controller, Get, Post, Headers} from '@nestjs/common';
+import {Body, Controller, Get, Post, Headers, UseGuards} from '@nestjs/common';
 import {AddAddressDTO} from "./dtos/addAddress.dto";
 import {ApiOkResponse} from "@nestjs/swagger";
 import {AddressSubscriptionUsecases} from "../../../usecases/addresSubscription.usecases";
+import {AuthGuard} from "../../common/guards/AuthGuard";
 
 const ADDRESS_ADDED = 'The address has been successfully added.';
 
 @Controller('subscribed-addresses')
+@UseGuards(AuthGuard)
 export class AddressSubscriptionController {
 
   constructor(private readonly addressSubscriptionUsecases: AddressSubscriptionUsecases) {}

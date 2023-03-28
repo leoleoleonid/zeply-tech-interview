@@ -21,11 +21,11 @@ export class UserRepository implements UserRepositoryInterface {
 
   async findById(id: number): Promise<User> {
     const userE = await this.userEntityRepository.findOneBy({id})
-    return this.toUser(userE);
+    return userE ? this.toUser(userE) : null;
   }
   async findByName(username: string): Promise<User> {
     const userE = await this.userEntityRepository.findOneBy({username})
-    return this.toUser(userE);
+    return userE ? this.toUser(userE) : null;
   }
 
   private toUser(userEntity: UserEntity): User {

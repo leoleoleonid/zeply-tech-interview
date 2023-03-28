@@ -4,5 +4,5 @@ import {ApiProperty} from "@nestjs/swagger";
 export class AddAddressDTO {
   @ApiProperty({ required: true })
   @IsString()
-  address: number;
+  address: string;
 }

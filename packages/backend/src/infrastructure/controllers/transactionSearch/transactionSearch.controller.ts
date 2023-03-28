@@ -1,13 +1,15 @@
-import {Controller, Get, Param, Patch, Query} from '@nestjs/common';
+import {Controller, Get, Param, Patch, Query, UseGuards} from '@nestjs/common';
 import {LimitDto} from "./dtos/limit.query-param.dto";
 import {ApiOkResponse} from "@nestjs/swagger";
 import {TransactionSearchPresenter} from "./presenters/transactionSearch.presentor";
 import {TransactionSearchUsecases} from "../../../usecases/transactionSearch.usecases";
 import {TransactionSearch} from "../../../domain/model/transactionSearch";
+import {AuthGuard} from "../../common/guards/AuthGuard";
 
 const TRANSACTION_SEARCH_SCORE_UPDATED = 'The transaction score has been successfully updated.';
 
 @Controller('transaction-search')
+@UseGuards(AuthGuard)
 export class TransactionSearchController {
 
   constructor(private readonly transactionSearchUsecases: TransactionSearchUsecases) {}

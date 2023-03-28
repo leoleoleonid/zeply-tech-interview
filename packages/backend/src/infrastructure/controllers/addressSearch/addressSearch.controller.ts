@@ -1,13 +1,15 @@
-import {Controller, Get, Param, Patch, Query} from '@nestjs/common';
+import {Controller, Get, Param, Patch, Query, UseGuards} from '@nestjs/common';
 import {LimitDto} from "./dtos/limit.query-param.dto";
 import {ApiOkResponse} from "@nestjs/swagger";
 import {AddressSearchPresenter} from "./presenters/addressSearch.presentor";
 import {AddressSearchUsecases} from "../../../usecases/addressSearch.usecases";
 import {AddressSearch} from "../../../domain/model/addressSearch";
+import {AuthGuard} from "../../common/guards/AuthGuard";
 
 const ADDRESS_SEARCH_SCORE_UPDATED = 'The address score has been successfully updated.';
 
 @Controller('address-search')
+@UseGuards(AuthGuard)
 export class AddressSearchController {
 
   constructor(private readonly addressSearchUsecases: AddressSearchUsecases) {}
