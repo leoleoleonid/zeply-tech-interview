@@ -14,6 +14,10 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import {debounce} from "lodash";
+import $api from "../http";
+import {toast} from "react-toastify";
+import {TopSearchesTransactionsList} from "../components/TopSearched/TopSearchedTransactionsList";
+import axios from "axios";
 
 function SearchBitcoinTransaction() {
     const {subscribedOnTransactions, setSubscribesOnTransactions} = useContext(SubscribeOnTransactionsContext);
@@ -37,13 +41,15 @@ function SearchBitcoinTransaction() {
         if (transactionHash && !validationError) {
             setValidationError(false)
             setIsLoading(true);
-            fetch(`https://blockchain.info/rawtx/${transactionHash}`)
-                .then(response => response.json())
+            axios.get(`https://blockchain.info/rawtx/${transactionHash}`)
+                // .then(response => response.json())
                 .then(data => {
                     delete data.tx;
                     console.log('data', data)
                     setIsLoading(false)
                     setResponse(data);
+                    $api.patch(`/address-search/new-search/${transactionHash}`)
+                        .catch(e => toast.error(e.message))
                 })
                 .catch(error => {
                     setIsLoading(false);
@@ -65,6 +71,7 @@ function SearchBitcoinTransaction() {
 
     return (
         <Container maxWidth="md">
+            <TopSearchesTransactionsList/>
             <Box marginTop={10}>
                 <FormControl component="fieldset" variant="standard">
                     <FormGroup>

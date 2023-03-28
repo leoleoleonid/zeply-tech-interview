@@ -1,35 +1,50 @@
 import React, {useState, useEffect, useContext} from 'react';
 import {WSConnectionContext} from "../WSConnectionProvider";
+import $api from "../../http";
+import {toast} from "react-toastify";
 
 export const SubscribedAddressesContext = React.createContext([]);
 
 function SubscribedAddressesProvider({children}) {
     const {ws} = useContext(WSConnectionContext);
     const [subscribedAddresses, setSubscribedAddresses] = useState([
-        '153yuheqMotbbAxxXc8Ztwx73oSMyAB1wq',
-        '13cKZYW75zBPuW6xp8Pt5QTWFHQpXosP56'
+        // '153yuheqMotbbAxxXc8Ztwx73oSMyAB1wq',
+        // '13cKZYW75zBPuW6xp8Pt5QTWFHQpXosP56'
     ]);
 
     useEffect(() => {
-        //TODO get subscribed addresses from backend
+        //TODO to model
         if (ws) {
-            subscribedAddresses.forEach((addr) => {
-                ws.send(JSON.stringify({
-                    op: "addr_sub",
-                    addr
-                }))
-            })
+            $api.get('/subscribed-addresses')
+                .then(({data: addresses}) => {
+                    setSubscribedAddresses(addresses);
+                    addresses.forEach((addr) => {
+                        ws.send(JSON.stringify({
+                            op: "addr_sub",
+                            addr
+                        }))
+                    })
+                })
+                .catch(e => {
+                    toast.error(JSON.stringify(e.message))
+                })
         }
     }, [ws])
 
     const addSubscribedAddress = (address) => {
-        //TODO add subscribed addresses on backend
-        const newSubscribedAddresses = [...subscribedAddresses, address];
-        setSubscribedAddresses(newSubscribedAddresses);
-        ws.send(JSON.stringify({
-            op: "addr_sub",
-            addr: address
-        }))
+        //TODO remove to model
+        $api.post('/subscribed-addresses', {address})
+            .then(() => {
+                const newSubscribedAddresses = [...subscribedAddresses, address];
+                setSubscribedAddresses(newSubscribedAddresses);
+                ws.send(JSON.stringify({
+                    op: "addr_sub",
+                    addr: address
+                }))
+            })
+            .catch(e => {
+                toast.error(JSON.stringify(e.message))
+            })
     };
 
     const removeSubscribedAddress = (addressToRemove) => {

@@ -1,9 +1,9 @@
 import Table from "../common/Table";
 import {useEffect, useState} from "react";
 import Divider from "@mui/material/Divider";
-import axios from "axios";
 import Alert from "@mui/material/Alert";
 import CircularProgress from "@mui/material/CircularProgress";
+import $api from "../../http";
 
 export const TopSearchesTransactionsList = () => {
     const [response, setResponse] = useState(null);
@@ -12,23 +12,20 @@ export const TopSearchesTransactionsList = () => {
 
     useEffect(() => {
         setIsLoading(true);
-        // axios.get('/top_searched_transactions?limit=5')
-        //     .then(({data}) => {
-        const data = [
-            {score: 123, transaction: 'qweqweqwe'}, {score: 32, transaction: 'dddddd'},{score: 333, transaction: 'dddddd'}
-        ];
-        const sorted = data.sort((a,b) => a.score > b.score ? -1 : 1 );
-        const scoreToAddr = {};
-        sorted.forEach((item) => {
-            scoreToAddr[item.score] = item.address;
-        })
-        setResponse(scoreToAddr);
-        setIsLoading(false);
-        // })
-        // .catch(e => {
-        //     setError(e)
-        //     setIsLoading(false);
-        // })
+        $api.get('/transaction-search/top?limit=5')
+            .then(({data}) => {
+                const sorted = data.sort((a,b) => a.score > b.score ? -1 : 1 );
+                const scoreToAddr = {};
+                sorted.forEach((item) => {
+                    scoreToAddr[item.score] = item.address;
+                })
+                setResponse(scoreToAddr);
+                setIsLoading(false);
+            })
+            .catch(e => {
+                setError(e)
+                setIsLoading(false);
+            })
     }, [])
 
 

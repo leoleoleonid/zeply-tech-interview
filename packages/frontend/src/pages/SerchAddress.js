@@ -11,8 +11,10 @@ import Alert from "@mui/material/Alert";
 import CircularProgress from "@mui/material/CircularProgress";
 import Divider from "@mui/material/Divider";
 import Typography from "@mui/material/Typography";
-import {TopNList} from "../components/TopNList/TopNList";
 import {TopSearchesAddressList} from "../components/TopSearched/TopSearchedAddressList";
+import $api from "../http";
+import {toast} from "react-toastify";
+import axios from "axios";
 
 function SearchBitcoinAddress() {
 
@@ -40,7 +42,7 @@ function SearchBitcoinAddress() {
         if (bitcoinAddress && !validationError) {
             setValidationError(false)
             setIsLoading(true);
-            fetch(`https://blockchain.info/rawaddr/${bitcoinAddress}`)
+            axios.get(`https://blockchain.info/rawaddr/${bitcoinAddress}`)
                 .then(response => response.json())
                 .then(data => {
                     data.confirmed_txs = (data.txs.filter(tx => tx.double_spend === false)).length;
@@ -50,6 +52,8 @@ function SearchBitcoinAddress() {
                     data.total_sent = calculatePrice(data.total_sent);
                     data.final_balance = calculatePrice(data.final_balance);
                     setResponseForCurrency(data);
+                    $api.patch(`/address-search/new-search/${bitcoinAddress}`)
+                        .catch(e => toast.error(e.message))
                 })
                 .catch(error => {
                     setIsLoading(false);
@@ -70,7 +74,6 @@ function SearchBitcoinAddress() {
 
     const handleSubscribe = () => {
         if (!subscribedAddresses.includes(bitcoinAddress) && !validationError) {
-            // TODO send new addr on server
             addSubscribedAddress(bitcoinAddress)
         }
     };
