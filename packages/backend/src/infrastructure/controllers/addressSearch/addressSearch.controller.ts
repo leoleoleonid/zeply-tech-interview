@@ -1,4 +1,4 @@
-import {Controller, Get, Param, Patch, Query, UseGuards} from '@nestjs/common';
+import {Controller, Get, Headers, Param, Patch, Query, UseGuards} from '@nestjs/common';
 import {LimitDto} from "./dtos/limit.query-param.dto";
 import {ApiOkResponse} from "@nestjs/swagger";
 import {AddressSearchPresenter} from "./presenters/addressSearch.presentor";
@@ -16,13 +16,17 @@ export class AddressSearchController {
 
   @Get('/top')
   @ApiOkResponse({type: AddressSearchPresenter, isArray: true})
-  async getTopAddressSearches(@Query() queryString: LimitDto): Promise<AddressSearch[]> {
+  async getTopAddressSearches(
+      @Headers('user_id') userId: number,
+      @Query() queryString: LimitDto
+  ): Promise<AddressSearch[]> {
     return this.addressSearchUsecases.getTopAddressSearches(queryString.limit);
   }
 
   @Patch('new-search/:address')
   @ApiOkResponse({description: ADDRESS_SEARCH_SCORE_UPDATED})
   async newAddressSearch(
+      @Headers('user_id') userId: number,
       @Param('address') address: string,
   ): Promise<string> {
     await this.addressSearchUsecases.newAddressSearch(address);
