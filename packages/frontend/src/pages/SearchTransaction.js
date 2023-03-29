@@ -42,11 +42,11 @@ function SearchBitcoinTransaction() {
             setValidationError(false)
             setIsLoading(true);
             axios.get(`https://blockchain.info/rawtx/${transactionHash}`)
-                .then(data => {
+                .then(({data}) => {
                     delete data.tx;
                     setIsLoading(false)
                     setResponse(data);
-                    $api.patch(`/address-search/new-search/${transactionHash}`)
+                    $api.patch(`/transaction-search/new-search/${transactionHash}`)
                         .catch(e => toast.error(e.message))
                 })
                 .catch(error => {
