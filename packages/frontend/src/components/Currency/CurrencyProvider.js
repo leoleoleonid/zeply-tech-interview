@@ -1,6 +1,5 @@
 import React, {useState, useEffect} from 'react';
 import axios from "axios";
-import $api from "../../http";
 
 export const CURRENCIES = {
     BTC: 'BTC',
@@ -32,7 +31,6 @@ function CurrencyProvider({children}) {
                     tickers[ticker.symbol] = ticker.price_24h
                 })
             setTickers(tickers)
-            console.log(tickers);
         })
     }, [])
 

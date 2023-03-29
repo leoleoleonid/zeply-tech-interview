@@ -7,18 +7,21 @@ export const AuthContext = React.createContext('');
 function AuthProvider({children}) {
     const navigate = useNavigate();
     const [user, setUser] = useState(null)
+    const [isLoadingUser, setIsLoadingUser] = useState(false)
 
     useEffect(() => {
-        const userId = localStorage.getItem('user_id');
-        if (!userId && window.location !== '/login') {
-            navigate('/login');
-        } else {
-            $api.get(`/auth/getUserById/${userId}`)
-                .then(({data: user}) => {
-                    console.log('getUserById user', user)
-                    setUser(user)
-                })
-        }
+        if (user !== null) return;
+            setIsLoadingUser(true)
+            const userId = localStorage.getItem('user_id');
+            if (!userId && window.location !== '/login') {
+                navigate('/login');
+            } else {
+                $api.get(`/auth/getUserById/${userId}`)
+                    .then(({data: user}) => {
+                        setUser(user)
+                        setIsLoadingUser(false)
+                    })
+            }
     }, [])
 
     const login = (username, password) => {
@@ -41,7 +44,7 @@ function AuthProvider({children}) {
 
     return (
         <AuthContext.Provider
-            value={{user, login, logout}}>
+            value={{user, isLoadingUser, login, logout}}>
             {children}
         </AuthContext.Provider>
     );

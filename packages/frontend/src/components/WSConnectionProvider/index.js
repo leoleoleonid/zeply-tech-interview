@@ -11,7 +11,6 @@ function WSConnectionProvider({ children }) {
         const ws = new WebSocket(`wss://ws.blockchain.info/inv`);
         ws.addEventListener('open', () => {
             if(ws.readyState === WebSocket.OPEN) {
-                console.log('ws.readyState', ws.readyState)
                 setWSConnected(ws);
                 ws.onmessage = event => {
                     const data = JSON.parse(event.data);

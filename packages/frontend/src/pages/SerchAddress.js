@@ -43,8 +43,7 @@ function SearchBitcoinAddress() {
             setValidationError(false)
             setIsLoading(true);
             axios.get(`https://blockchain.info/rawaddr/${bitcoinAddress}`)
-                .then(response => response.json())
-                .then(data => {
+                .then(({data}) => {
                     data.confirmed_txs = (data.txs.filter(tx => tx.double_spend === false)).length;
                     setIsLoading(false);
                     setResponse({...data});

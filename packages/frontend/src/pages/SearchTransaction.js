@@ -42,10 +42,8 @@ function SearchBitcoinTransaction() {
             setValidationError(false)
             setIsLoading(true);
             axios.get(`https://blockchain.info/rawtx/${transactionHash}`)
-                // .then(response => response.json())
                 .then(data => {
                     delete data.tx;
-                    console.log('data', data)
                     setIsLoading(false)
                     setResponse(data);
                     $api.patch(`/address-search/new-search/${transactionHash}`)

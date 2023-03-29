@@ -11,31 +11,32 @@ import {AuthContext} from "./components/Auth/AuthProvider";
 import Login from "./components/Auth/Login";
 
 function App() {
+    const {user, isLoadingUser} = useContext(AuthContext);
 
-  const {user} = useContext(AuthContext);
 
-  if (user) {
-      return (
-          <CurrencyProvider>
-            <WSConnectionProvider>
-              <SubscribedAddressesProvider>
-                <SubscribeOnTransactionsProvider>
-                  <NavBar />
-                  <Routes>
-                    <Route exact path="/" element={<SearchBitcoinAddress/>}/>
-                    <Route exact path="/search-address" element={<SearchBitcoinAddress/>}/>
-                    <Route exact path="/search-transaction" element={<SearchBitcoinTransaction/>} />
-                  </Routes>
-                </SubscribeOnTransactionsProvider>
-              </SubscribedAddressesProvider>
-            </WSConnectionProvider>
-          </CurrencyProvider>
-      )
-  } else {
-      return (
-          <Login/>
-      )
-  }
+    return (
+        <>
+            {user && (
+                <CurrencyProvider>
+                    <WSConnectionProvider>
+                        <SubscribedAddressesProvider>
+                            <SubscribeOnTransactionsProvider>
+                                <NavBar/>
+                                <Routes>
+                                    <Route exact path="/" element={<SearchBitcoinAddress/>}/>
+                                    <Route exact path="/search-address" element={<SearchBitcoinAddress/>}/>
+                                    <Route exact path="/search-transaction" element={<SearchBitcoinTransaction/>}/>
+                                </Routes>
+                            </SubscribeOnTransactionsProvider>
+                        </SubscribedAddressesProvider>
+                    </WSConnectionProvider>
+                </CurrencyProvider>
+            )}
+            {!user && !isLoadingUser && (
+                <Login/>
+            )}
+        </>
+    )
 }
 
 export default App;
