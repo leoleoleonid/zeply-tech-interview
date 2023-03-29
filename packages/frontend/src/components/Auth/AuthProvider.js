@@ -13,8 +13,9 @@ function AuthProvider({children}) {
         if (user !== null) return;
             setIsLoadingUser(true)
             const userId = localStorage.getItem('user_id');
-            if (!userId && window.location !== '/login') {
-                navigate('/login');
+            if (!userId) {
+                if(window.location !== '/login') navigate('/login');
+                setIsLoadingUser(false)
             } else {
                 $api.get(`/auth/getUserById/${userId}`)
                     .then(({data: user}) => {

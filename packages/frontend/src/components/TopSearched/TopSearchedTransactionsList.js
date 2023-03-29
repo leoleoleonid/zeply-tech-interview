@@ -14,10 +14,8 @@ export const TopSearchesTransactionsList = () => {
         setIsLoading(true);
         $api.get('/transaction-search/top?limit=5')
             .then(({data}) => {
-                const sorted = data.sort((a,b) => a.score > b.score ? -1 : 1 );
-                const scoreToAddr = {};
-                sorted.forEach((item) => {
-                    scoreToAddr[item.score] = item.address;
+                const scoreToAddr = data.map(({score, transaction}) => {
+                    return [score, transaction]
                 })
                 setResponse(scoreToAddr);
                 setIsLoading(false);

@@ -19,7 +19,7 @@ export default function Table({title, data, headers}) {
                     </>
                 )}
                 {
-                    Object.entries(data).map(([key, value]) => (
+                    data.map(([key, value]) => (
                         <TableLine
                             column1={key}
                             column2={value}

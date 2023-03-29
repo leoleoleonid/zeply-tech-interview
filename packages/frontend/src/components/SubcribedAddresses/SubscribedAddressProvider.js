@@ -7,10 +7,7 @@ export const SubscribedAddressesContext = React.createContext([]);
 
 function SubscribedAddressesProvider({children}) {
     const {ws} = useContext(WSConnectionContext);
-    const [subscribedAddresses, setSubscribedAddresses] = useState([
-        // '153yuheqMotbbAxxXc8Ztwx73oSMyAB1wq',
-        // '13cKZYW75zBPuW6xp8Pt5QTWFHQpXosP56'
-    ]);
+    const [subscribedAddresses, setSubscribedAddresses] = useState([]);
 
     useEffect(() => {
         //TODO to model
