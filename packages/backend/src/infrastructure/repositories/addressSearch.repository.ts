@@ -36,7 +36,6 @@ export class AddressSearchRepository implements AddressSearchRepositoryInterface
     return addressSearchEntities.map((addrE) => this.toAddressSearch(addrE))
   }
   async updateScore(address: string): Promise<void> {
-    // TODO optimize
     const addressSearchEntity = await this.addressSearchEntityRepository.findOneBy({address});
     const score = addressSearchEntity.score + 1;
     await this.addressSearchEntityRepository.update({

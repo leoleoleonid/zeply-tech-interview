@@ -30,9 +30,9 @@ export class AddressSubscriptionRepository implements AddressSubscriptionReposit
     await this.addressSubscriptionEntityRepository.insert(addrSubscription);
   }
   async findByUserId(userId: number): Promise<string[]> {
-    const addrSunEntities = await this.addressSubscriptionEntityRepository.find({
+    const addrSubEntities = await this.addressSubscriptionEntityRepository.find({
       where: { user: { id: userId } }
     });
-    return addrSunEntities.map((a) => a.address);
+    return addrSubEntities.map((a) => a.address);
   }
 }
