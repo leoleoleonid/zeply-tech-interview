@@ -10,15 +10,18 @@ import {ILOGGER_TOCKEN} from "./domain/logger/logger.interface";
 async function bootstrap() {
     const app = await NestFactory.create(AppModule);
     const configService = app.get(ConfigService);
+    const origin = [];
     if (configService.get("NODE_ENV") === 'development') {
+        origin.push(`http://localhost:${configService.get('CLIENT_PORT')}`)
         app.enableCors({
             credentials: true,
-            "origin": [`http://localhost:${configService.get('CLIENT_PORT')}`],
+            "origin": origin,
             "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
             "preflightContinue": false,
             "optionsSuccessStatus": 204
         });
     }
+
     const loggerService = app.get(ILOGGER_TOCKEN);
     app.setGlobalPrefix('api/v1');
     app.useGlobalPipes(

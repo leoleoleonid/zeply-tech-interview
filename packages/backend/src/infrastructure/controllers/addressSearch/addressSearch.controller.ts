@@ -17,7 +17,7 @@ export class AddressSearchController {
   @Get('/top')
   @ApiOkResponse({type: AddressSearchPresenter, isArray: true})
   async getTopAddressSearches(
-      @Headers('user_id') userId: number,
+      @Headers('user-id') userId: number,
       @Query() queryString: LimitDto
   ): Promise<AddressSearch[]> {
     return this.addressSearchUsecases.getTopAddressSearches(queryString.limit);
@@ -26,7 +26,7 @@ export class AddressSearchController {
   @Patch('new-search/:address')
   @ApiOkResponse({description: ADDRESS_SEARCH_SCORE_UPDATED})
   async newAddressSearch(
-      @Headers('user_id') userId: number,
+      @Headers('user-id') userId: number,
       @Param('address') address: string,
   ): Promise<string> {
     await this.addressSearchUsecases.newAddressSearch(address);

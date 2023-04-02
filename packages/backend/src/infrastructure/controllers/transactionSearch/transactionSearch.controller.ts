@@ -17,7 +17,7 @@ export class TransactionSearchController {
   @Get('/top')
   @ApiOkResponse({type: TransactionSearchPresenter, isArray: true})
   async getTopTransactionSearches(
-      @Headers('user_id') userId: number,
+      @Headers('user-id') userId: number,
       @Query() queryString: LimitDto
   ): Promise<TransactionSearch[]> {
     return this.transactionSearchUsecases.getTopTransactionSearches(queryString.limit);
@@ -26,7 +26,7 @@ export class TransactionSearchController {
   @Patch('new-search/:transaction')
   @ApiOkResponse({description: TRANSACTION_SEARCH_SCORE_UPDATED})
   async newTransactionSearch(
-      @Headers('user_id') userId: number,
+      @Headers('user-id') userId: number,
       @Param('transaction') transaction: string,
   ): Promise<string> {
     await this.transactionSearchUsecases.newTransactionSearch(transaction);

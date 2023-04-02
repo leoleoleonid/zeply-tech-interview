@@ -12,7 +12,7 @@ function AuthProvider({children}) {
     useEffect(() => {
         if (user !== null) return;
             setIsLoadingUser(true)
-            const userId = localStorage.getItem('user_id');
+            const userId = localStorage.getItem('user-id');
             if (!userId) {
                 if(window.location !== '/login') navigate('/login');
                 setIsLoadingUser(false)
@@ -28,8 +28,8 @@ function AuthProvider({children}) {
     const login = (username, password) => {
         $api.post('auth/login', {username})
             .then(({data: user}) => {
-                localStorage.removeItem('user_id');
-                localStorage.setItem('user_id', user.id);
+                localStorage.removeItem('user-id');
+                localStorage.setItem('user-id', user.id);
                 setUser(user);
                 navigate('/');
             })
@@ -39,7 +39,7 @@ function AuthProvider({children}) {
     };
 
     const logout = () => {
-        localStorage.removeItem("user_id");
+        localStorage.removeItem("user-id");
         setUser(null);
     };
 

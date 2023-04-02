@@ -14,14 +14,14 @@ export class AddressSubscriptionController {
 
   @Get()
   @ApiOkResponse({isArray: true})
-  async getSubscribedAddresses(@Headers('user_id') userId: number): Promise<string[]> {
+  async getSubscribedAddresses(@Headers('user-id') userId: number): Promise<string[]> {
     return this.addressSubscriptionUsecases.getSubscribedAddresses(userId)
   }
 
   @Post()
   @ApiOkResponse({description: ADDRESS_ADDED})
   async addAddress(
-      @Headers('user_id') userId: number,
+      @Headers('user-id') userId: number,
       @Body() body: AddAddressDTO,
   ): Promise<string> {
     await this.addressSubscriptionUsecases.addAddress(userId, body.address);
