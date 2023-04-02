@@ -22,8 +22,10 @@ export class TransactionSearchUsecases {
 
     async newTransactionSearch(transaction: string): Promise<void> {
         this.logger.log('Execute newTransactionSearch', `transaction: ${transaction}`);
-        if (await this.transactionSearchRepository.isAlreadyExist(transaction)) {
-            await this.transactionSearchRepository.updateScore(transaction);
+        const transactionSearch: TransactionSearch = await this.transactionSearchRepository.findOne(transaction);
+        if (transactionSearch) {
+            transactionSearch.increaseScore();
+            await this.transactionSearchRepository.updateScore(transactionSearch.transaction, transactionSearch.score);
             this.logger.log('Score updated', `transaction: ${transaction}`);
         } else {
             await this.transactionSearchRepository.insert(transaction);

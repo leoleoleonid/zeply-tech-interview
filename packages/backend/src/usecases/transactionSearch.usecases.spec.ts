@@ -11,15 +11,12 @@ import {TransactionSearch} from "../domain/model/transactionSearch";
 describe('TransactionSearchUsecases', () => {
     let transactionSearchUsecases: TransactionSearchUsecases;
     let transactionSearchRepository: TransactionSearchRepositoryInterface;
-    let loggerMock;
 
     beforeEach(async () => {
-        loggerMock  = {
-            log: jest.fn(),
-        };
         transactionSearchRepository = {
             findTop: jest.fn(),
             isAlreadyExist: jest.fn(),
+            findOne: jest.fn(),
             insert: jest.fn(),
             updateScore: jest.fn(),
         };
@@ -49,9 +46,11 @@ describe('TransactionSearchUsecases', () => {
         it('should call findTop method of transactionSearchRepository with the provided limit', async () => {
             const limit = 5;
             const expectedTopTransactionSearches: TransactionSearch[] = [
+                // (new TransactionSearch('transaction1', 10)),
+                // (new TransactionSearch('transaction2', 8)),
                 { transaction: 'transaction1', score: 10 },
                 { transaction: 'transaction2', score: 8 },
-            ];
+            ] as TransactionSearch[];
             (transactionSearchRepository.findTop as jest.Mock).mockResolvedValue(expectedTopTransactionSearches);
 
             const topTransactionSearches = await transactionSearchUsecases.getTopTransactionSearches(limit);
@@ -64,21 +63,28 @@ describe('TransactionSearchUsecases', () => {
     describe('newTransactionSearch', () => {
         it('should call updateScore method of transactionSearchRepository if transaction already exists', async () => {
             const transaction = 'existing-transaction';
-            (transactionSearchRepository.isAlreadyExist as jest.Mock).mockResolvedValue(true);
+            const initialScore = 1;
+            const transactionSearch = new TransactionSearch();
+            transactionSearch.transaction = transaction;
+            transactionSearch.score = initialScore;
+            (transactionSearchRepository.findOne as jest.Mock).mockResolvedValue(transactionSearch);
 
             await transactionSearchUsecases.newTransactionSearch(transaction);
 
-            expect(transactionSearchRepository.isAlreadyExist).toHaveBeenCalledWith(transaction);
-            expect(transactionSearchRepository.updateScore).toHaveBeenCalledWith(transaction);
+            expect(transactionSearchRepository.findOne).toHaveBeenCalledWith(transaction);
+            expect(transactionSearchRepository.updateScore).toHaveBeenCalledWith(transaction, initialScore + 1);
         });
 
         it('should call insert method of transactionSearchRepository if transaction does not exist', async () => {
             const transaction = 'new-transaction';
-            (transactionSearchRepository.isAlreadyExist as jest.Mock).mockResolvedValue(false);
+            const transactionSearch = new TransactionSearch();
+            transactionSearch.transaction = transaction;
+            transactionSearch.score = 1;
+            (transactionSearchRepository.findOne as jest.Mock).mockResolvedValue(false);
 
             await transactionSearchUsecases.newTransactionSearch(transaction);
 
-            expect(transactionSearchRepository.isAlreadyExist).toHaveBeenCalledWith(transaction);
+            expect(transactionSearchRepository.findOne).toHaveBeenCalledWith(transaction);
             expect(transactionSearchRepository.insert).toHaveBeenCalledWith(transaction);
         });
     });

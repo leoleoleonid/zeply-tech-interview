@@ -26,6 +26,12 @@ export class TransactionSearchRepository implements TransactionSearchRepositoryI
         await this.transactionSearchEntityRepository.findOneBy({transaction});
     return Boolean(transactionRes)
   }
+
+  async findOne(transaction: string): Promise<TransactionSearch> {
+    const transactionRes: TransactionSearchEntity =
+        await this.transactionSearchEntityRepository.findOneBy({transaction});
+    return transactionRes ? this.toTransactionSearch(transactionRes): null
+  }
   async findTop(limit: number): Promise<TransactionSearch[]> {
     const transactionSearchEntities =
         await this.transactionSearchEntityRepository.find({
@@ -35,20 +41,17 @@ export class TransactionSearchRepository implements TransactionSearchRepositoryI
           },
         });
 
-    return transactionSearchEntities.map((tE) => this.toAddressSearch(tE))
+    return transactionSearchEntities.map((tE) => this.toTransactionSearch(tE))
   }
-  async updateScore(transaction: string): Promise<void> {
-    // TODO optimize
-    const addressSearchEntity = await this.transactionSearchEntityRepository.findOneBy({transaction});
-    const score = addressSearchEntity.score + 1;
+  async updateScore(transaction: string, newScore: number): Promise<void> {
     await this.transactionSearchEntityRepository.update({
       transaction
     }, {
-      score
+      score: newScore
     })
   }
 
-  private toAddressSearch(transactionSearchEntity: TransactionSearchEntity): TransactionSearch {
+  private toTransactionSearch(transactionSearchEntity: TransactionSearchEntity): TransactionSearch {
     const transactionSearch = new TransactionSearch();
     transactionSearch.transaction = transactionSearchEntity.transaction;
     transactionSearch.score = transactionSearchEntity.score;
