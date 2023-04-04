@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import axios from "axios";
+import $api from "../../http";
 
 export const CURRENCIES = {
     BTC: 'BTC',
@@ -23,7 +24,7 @@ function CurrencyProvider({children}) {
     }
 
     useEffect(() => {
-        axios.get(TICKERS_URL).then(response => {
+        $api.get(TICKERS_URL).then(response => {
             const tickers = {};
             response.data
                 .filter(ticker => PAIRS.includes(ticker.symbol))

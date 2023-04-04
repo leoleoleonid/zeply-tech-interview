@@ -6,9 +6,8 @@ export const WSConnectionContext = React.createContext([]);
 
 function WSConnectionProvider({ children }) {
     const [ws, setWSConnected] = useState(false);
-
     useEffect(() => {
-        const ws = new WebSocket(`wss://ws.blockchain.info/inv`);
+        const ws = new WebSocket(process.env.REACT_APP_WS_URL)
         ws.addEventListener('open', () => {
             if(ws.readyState === WebSocket.OPEN) {
                 setWSConnected(ws);
