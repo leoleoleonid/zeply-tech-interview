@@ -1,12 +1,6 @@
-import $api from "../../http";
+import axios from "axios";
 
-
-const authApi = {
-    getUserById: async (userId) => {
-        return $api.get(`/auth/getUserById/${userId}`)
-    },
-    login: async (username) => {
-        return $api.post(`auth/login`, {username})
-    },
+const currencyApi = {
+    getTickers: async () => axios.get(process.env.REACT_APP_TICKERS_URL)
 }
-export default authApi;
+export default currencyApi;

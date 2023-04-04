@@ -1,6 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import axios from "axios";
-import $api from "../../http";
+import currencyApi from "./currencyApi";
 
 export const CURRENCIES = {
     BTC: 'BTC',
@@ -10,8 +9,6 @@ export const CURRENCIES = {
 
 const PAIRS = ['BTC-USD', 'BTC-EUR']
 export const CurrencyContext = React.createContext(CURRENCIES.BTC);
-
-const TICKERS_URL = "https://api.blockchain.com/v3/exchange/tickers";
 
 function CurrencyProvider({children}) {
     const [currency, setCurrency] = useState(CURRENCIES.BTC);
@@ -24,13 +21,12 @@ function CurrencyProvider({children}) {
     }
 
     useEffect(() => {
-        $api.get(TICKERS_URL).then(response => {
+        currencyApi.getTickers().then(response => {
             const tickers = {};
             response.data
                 .filter(ticker => PAIRS.includes(ticker.symbol))
-                .map(ticker => {
-                    tickers[ticker.symbol] = ticker.price_24h
-                })
+                .map(ticker => tickers[ticker.symbol] = ticker.price_24h)
+
             setTickers(tickers)
         })
     }, [])
