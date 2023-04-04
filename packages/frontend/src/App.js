@@ -2,21 +2,19 @@ import CurrencyProvider from "./components/Currency/CurrencyProvider";
 import WSConnectionProvider from "./components/WSConnectionProvider";
 import SubscribedAddressesProvider from "./components/SubcribedAddresses/SubscribedAddressProvider";
 import SubscribeOnTransactionsProvider from "./components/SubscribeOnTransactions/SubscribeOnTransactionsProvider";
-import {Route, Routes} from "react-router-dom";
+import {BrowserRouter, Route, Routes} from "react-router-dom";
 import {NavBar} from "./components/NavBar";
 import SearchBitcoinAddress from "./pages/SerchAddress";
 import SearchBitcoinTransaction from "./pages/SearchTransaction";
-import React, {useContext} from "react";
-import {AuthContext} from "./components/Auth/AuthProvider";
-import Login from "./components/Auth/Login";
+import React from "react";
+import AuthProvider from "./components/Auth/AuthProvider";
+
 
 function App() {
-    const {user, isLoadingUser} = useContext(AuthContext);
-
 
     return (
-        <>
-            {user && (
+        <BrowserRouter>
+            <AuthProvider>
                 <CurrencyProvider>
                     <WSConnectionProvider>
                         <SubscribedAddressesProvider>
@@ -31,11 +29,8 @@ function App() {
                         </SubscribedAddressesProvider>
                     </WSConnectionProvider>
                 </CurrencyProvider>
-            )}
-            {!user && !isLoadingUser && (
-                <Login/>
-            )}
-        </>
+            </AuthProvider>
+        </BrowserRouter>
     )
 }
 

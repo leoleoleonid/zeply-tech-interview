@@ -12,11 +12,12 @@ export default function Login() {
     return (
         <Container component="main" maxWidth="xs">
             <CssBaseline />
-            <div >
+            <div>
                 <Typography component="h1" variant="h5">
                     Login in
                 </Typography>
                     <TextField
+                        data-testid='login-input'
                         variant="outlined"
                         margin="normal"
                         required
@@ -29,6 +30,7 @@ export default function Login() {
                         onChange={(event) => setUsername(event.target.value)}
                     />
                     <Button
+                        data-testid="login-btn"
                         type="submit"
                         fullWidth
                         variant="contained"
