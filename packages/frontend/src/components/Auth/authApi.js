@@ -1,6 +1,5 @@
 import $api from "../../http";
 
-
 const authApi = {
     getUserById: async (userId) => {
         return $api.get(`/auth/getUserById/${userId}`)

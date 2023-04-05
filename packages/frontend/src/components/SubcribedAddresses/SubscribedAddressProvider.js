@@ -1,7 +1,7 @@
 import React, {useState, useEffect, useContext} from 'react';
 import {WSConnectionContext} from "../WSConnectionProvider";
-import $api from "../../http";
 import {toast} from "react-toastify";
+import subscribedAddressApi from "./subscribedAddressApi";
 
 export const SubscribedAddressesContext = React.createContext([]);
 
@@ -10,9 +10,8 @@ function SubscribedAddressesProvider({children}) {
     const [subscribedAddresses, setSubscribedAddresses] = useState([]);
 
     useEffect(() => {
-        //TODO to model
         if (ws) {
-            $api.get('/subscribed-addresses')
+            subscribedAddressApi.getSubscribedAddress()
                 .then(({data: addresses}) => {
                     setSubscribedAddresses(addresses);
                     addresses.forEach((addr) => {
@@ -29,8 +28,7 @@ function SubscribedAddressesProvider({children}) {
     }, [ws])
 
     const addSubscribedAddress = (address) => {
-        //TODO remove to model
-        $api.post('/subscribed-addresses', {address})
+        subscribedAddressApi.subscribeOnAddress(address)
             .then(() => {
                 const newSubscribedAddresses = [...subscribedAddresses, address];
                 setSubscribedAddresses(newSubscribedAddresses);
@@ -44,19 +42,9 @@ function SubscribedAddressesProvider({children}) {
             })
     };
 
-    const removeSubscribedAddress = (addressToRemove) => {
-        //TODO rm subscribed addresses on backend
-        const newSubscribedAddresses = [...subscribedAddresses.filter(addr => addr !== addressToRemove)];
-        setSubscribedAddresses(newSubscribedAddresses);
-        ws.send(JSON.stringify({
-            op: "addr_unsub",
-            addr: addressToRemove
-        }))
-    };
-
     return (
         <SubscribedAddressesContext.Provider
-            value={{subscribedAddresses, addSubscribedAddress, removeSubscribedAddress}}>
+            value={{subscribedAddresses, addSubscribedAddress}}>
             {children}
         </SubscribedAddressesContext.Provider>
     );
