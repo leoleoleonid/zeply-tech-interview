@@ -16,7 +16,7 @@ import Divider from "@mui/material/Divider";
 import {debounce} from "lodash";
 import $api from "../http";
 import {toast} from "react-toastify";
-import {TopSearchesTransactionsList} from "../components/TopSearched/TopSearchedTransactionsList";
+import {TopSearchedTransactionsList} from "../components/TopSearched/TopSearchedTransactionsList";
 import axios from "axios";
 
 function SearchBitcoinTransaction() {
@@ -69,7 +69,7 @@ function SearchBitcoinTransaction() {
 
     return (
         <Container maxWidth="md">
-            <TopSearchesTransactionsList/>
+            <TopSearchedTransactionsList/>
             <Box marginTop={10}>
                 <FormControl component="fieldset" variant="standard">
                     <FormGroup>

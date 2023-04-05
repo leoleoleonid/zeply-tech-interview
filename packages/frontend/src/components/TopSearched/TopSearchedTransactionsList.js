@@ -3,16 +3,16 @@ import {useEffect, useState} from "react";
 import Divider from "@mui/material/Divider";
 import Alert from "@mui/material/Alert";
 import CircularProgress from "@mui/material/CircularProgress";
-import $api from "../../http";
+import topTransactionsApi from "./topTransactionsApi";
 
-export const TopSearchesTransactionsList = () => {
+export const TopSearchedTransactionsList = () => {
     const [response, setResponse] = useState(null);
     const [error, setError] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         setIsLoading(true);
-        $api.get('/transaction-search/top?limit=5')
+        topTransactionsApi.getTopTransactions()
             .then(({data}) => {
                 const scoreToAddr = data.map(({score, transaction}) => {
                     return [score, transaction]
@@ -42,10 +42,10 @@ export const TopSearchesTransactionsList = () => {
 
             {error && (
                 <Alert severity="error" style={{ marginTop: '1rem' }}>
-                    {JSON.stringify(error)}
+                    {JSON.stringify(error.message)}
                 </Alert>
             )}
-            {isLoading && <CircularProgress style={{ marginTop: '1rem' }} />}
+            {isLoading && <CircularProgress data-testid='loader' style={{ marginTop: '1rem' }} />}
         </>
     )
 }
